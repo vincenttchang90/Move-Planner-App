@@ -46,6 +46,8 @@ street = caps(street);
     $.ajax({
       url: url,
       method: 'GET',
+    }).error(function() {
+        $('#nytimes-header').text("New York Times Acticles Count Not be Loaded")
     }).done(function(result) {
         console.log(result);
       result.response.docs.forEach(function(story) {
