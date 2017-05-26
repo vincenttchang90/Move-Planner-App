@@ -32,8 +32,8 @@ function loadData() {
         return string
 }
 
-city = caps(city);
-street = caps(street);
+    city = caps(city);
+    street = caps(street);
 
     $('body').append("<img class='bgimg' src="+webAddress+">");
     $("#greeting").text("So, you want to live at " + street + ", " + city + "?");
@@ -58,6 +58,24 @@ street = caps(street);
     }).fail(function(err) {
       throw err;
     });
+
+    var wikiRequestTimeout = setTimeout(function(){
+        $("#wikipedia-links").text("failed to get wikipedia resources");
+    }, 8000);
+
+    var wikiUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + city + "&format=json&callback=wikiCallback";
+    $.ajax({
+        url: wikiUrl,
+        dataType: "jsonp",
+        success: function(response){
+            console.log(response);
+            for (var i = 0; i < response[1].length; i++){
+                $('#wikipedia-links').append("<li><a href="+ response[3][i] +">"+ response[1][i] +"</a></li>")
+            }
+            clearTimeout(wikiRequestTimeout);
+        }
+    });
+
 
 
 
